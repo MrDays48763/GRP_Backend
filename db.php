@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbuser ='superui';
+$dbuser ='admin';
 $dbpassword = 'qaz901028';
 $dbname = 'webclass';
 $link = mysqli_connect($host,$dbuser,$dbpassword,$dbname);

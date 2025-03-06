@@ -6,12 +6,12 @@ require_once 'db.php';
 header("Access-Control-Allow-Origin:*");
 header("Content-Type:text/html;charset=utf-8");
 // sql語法存在變數中
-$SN = $_GET['SN'];
+$ID = $_GET['ID'];
 
-$sql = "SELECT `UserInfoID` AS `ID`,userinfo.Name AS `Name` FROM `userinfo`,`roles`,`roles_users`
-  WHERE `RolesSN`='" . $SN . "' AND `UserInfoID`=`ID` AND `RolesSN`=roles.SN";
+$sql = "SELECT `UserID` AS `ID`,users.Name AS `Name` FROM `users`,`roles`,`users_groups_roles`
+  WHERE `roleID`='" . $ID . "' AND `UserID`=`ID` AND `roleID`=roles.ID";
 // 用mysqli_query方法執行(sql語法)將結果存在變數中
-$result = mysqli_query($link,$sql);
+$result = mysqli_query($conn,$sql);
 // 如果有資料
 if ($result) {
   // mysqli_num_rows方法可以回傳我們結果總共有幾筆資料
@@ -29,7 +29,7 @@ if ($result) {
   mysqli_free_result($result);
 }
 else {
-  echo "{$sql} 語法執行失敗，錯誤訊息: " . mysqli_error($link);
+  echo "{$sql} 語法執行失敗，錯誤訊息: " . mysqli_error($conn);
 }
 
 header('Context-type: application/json');

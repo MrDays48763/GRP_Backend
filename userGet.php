@@ -6,9 +6,9 @@ require_once 'db.php';
 header("Access-Control-Allow-Origin:*");
 header("Content-Type:text/html;charset=utf-8");
 // sql語法存在變數中
-$sql = "SELECT `ID`,`Name` FROM `userinfo` WHERE 1";
+$sql = "SELECT `ID`,`LName` FROM `users` WHERE 1";
 // 用mysqli_query方法執行(sql語法)將結果存在變數中
-$result = mysqli_query($link,$sql);
+$result = mysqli_query($conn,$sql);
 // 如果有資料
 if ($result) {
   // mysqli_num_rows方法可以回傳我們結果總共有幾筆資料
@@ -26,18 +26,9 @@ if ($result) {
   mysqli_free_result($result);
 }
 else {
-  echo "{$sql} 語法執行失敗，錯誤訊息: " . mysqli_error($link);
+  echo "{$sql} 語法執行失敗，錯誤訊息: " . mysqli_error($conn);
 }
 
-//   // 處理完後印出資料
-// if(!empty($result)){
-//   // 如果結果不為空，就利用print_r方法印出資料
-//   print_r($datas);
-// }
-// else {
-//   // 為空表示沒資料
-//   echo "查無資料";
-// }
 header('Context-type: application/json');
 echo json_encode($datas);
 ?>

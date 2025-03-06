@@ -1,14 +1,13 @@
 <?php
-$host = 'localhost';
-$dbuser ='admin';
-$dbpassword = 'qaz901028';
-$dbname = 'webclass';
-$link = mysqli_connect($host,$dbuser,$dbpassword,$dbname);
-if($link){
-    mysqli_query($link,'SET NAMES uff8');
-    // echo "正確連接資料庫";
-}
-else {
-    echo "不正確連接資料庫</br>" . mysqli_connect_error();
-}
+require_once 'account.php';
+?>
+<?php
+$conn = mysqli_connect($host,$username,$password,$dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+  }
+mysqli_query($conn,'SET NAMES utf8');
+echo "Connected successfully<br>";
 ?>

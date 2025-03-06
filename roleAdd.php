@@ -7,15 +7,22 @@ header("Access-Control-Allow-Origin:*");
 header("Content-Type:text/html;charset=utf-8");
 // sql語法存在變數中
 $Name = $_GET['Name'];
-$groupSN = $_GET['groupSN'];
+$groupID = $_GET['groupID'];
 
 $sql = "INSERT INTO `roles`(`Name`, `Status`) VALUES ('" . $Name . "',1)";
-// 用mysqli_query方法執行(sql語法)將結果存在變數中
-$result = mysqli_query($link,$sql);
-mysqli_free_result($result);
+// // 用mysqli_query方法執行(sql語法)將結果存在變數中
+// $result = mysqli_query($conn,$sql);
+// mysqli_free_result($result);
 
-$sql = "SELECT `SN`,`Name` FROM `roles` ORDER BY `SN` DESC LIMIT 0 , 1";
-$result = mysqli_query($link,$sql);
+try {
+  mysqli_query($conn, $sql);
+  echo "New record created successfully";
+} catch(mysqli_sql_exception $e) {
+  echo "Error: " . $sql . "<br>\n" . $e;
+}
+
+$sql = "SELECT `ID`,`Name` FROM `roles` ORDER BY `ID` DESC LIMIT 0 , 1";
+$result = mysqli_query($conn,$sql);
 // 如果有資料
 if ($result) {
   // mysqli_num_rows方法可以回傳我們結果總共有幾筆資料
@@ -25,7 +32,7 @@ if ($result) {
       // mysqli_fetch_assoc方法可取得一筆值
       while ($row = mysqli_fetch_assoc($result)) {
           // 每跑一次迴圈就抓一筆值，最後放進data陣列中
-          $row['SN'] = (int) $row['SN'];
+          $row['ID'] = (int) $row['ID'];
           $datas[] = $row;
       }
   }
@@ -33,13 +40,19 @@ if ($result) {
   mysqli_free_result($result);
 }
 else {
-  echo "{$sql} 語法執行失敗，錯誤訊息: " . mysqli_error($link);
+  echo "{$sql} 語法執行失敗，錯誤訊息: " . mysqli_error($conn);
 }
 
 header('Context-type: application/json');
 echo json_encode($datas);
 
-$sql = "INSERT INTO `groups_roles`(`GroupsSN`, `RolesSN`) VALUES ('" . $groupSN . "' , '" . $datas[0]['SN'] . "')";
-$result = mysqli_query($link,$sql);
-mysqli_free_result($result);
+$sql = "INSERT INTO `users_groups_roles`(`UserID`,`groupID`, `roleID`) VALUES ('admin'," . $groupID . "," . $datas[0]['ID'] . ")";
+// $result = mysqli_query($conn,$sql);
+// mysqli_free_result($result);
+try {
+  mysqli_query($conn, $sql);
+  echo "New record created successfully";
+} catch(mysqli_sql_exception $e) {
+  echo "Error: " . $sql . "<br>\n" . $e;
+}
 ?>

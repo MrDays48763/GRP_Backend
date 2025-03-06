@@ -6,12 +6,12 @@ require_once 'db.php';
 header("Access-Control-Allow-Origin:*");
 header("Content-Type:text/html;charset=utf-8");
 // sql語法存在變數中
-$SN = $_GET['SN'];
+$ID = $_GET['ID'];
 
-$sql = "SELECT `RolesSN`,roles.Name AS RolesName FROM `groups`,`roles`,`groups_roles`
-  WHERE `GroupsSN`='" . $SN . "' AND `GroupsSN`=groups.SN AND `RolesSN`=roles.SN";
+$sql = "SELECT `roleID`,roles.Name AS roleName FROM `groups`,`roles`,`users_groups_roles`
+  WHERE `groupID`='" . $ID . "' AND `groupID`=groups.ID AND `roleID`=roles.ID";
 // 用mysqli_query方法執行(sql語法)將結果存在變數中
-$result = mysqli_query($link,$sql);
+$result = mysqli_query($conn,$sql);
 // 如果有資料
 if ($result) {
   // mysqli_num_rows方法可以回傳我們結果總共有幾筆資料
@@ -21,7 +21,7 @@ if ($result) {
       // mysqli_fetch_assoc方法可取得一筆值
       while ($row = mysqli_fetch_assoc($result)) {
           // 每跑一次迴圈就抓一筆值，最後放進data陣列中
-          $row['RolesSN'] = (int) $row['RolesSN'];
+          $row['roleID'] = (int) $row['roleID'];
           $datas[] = $row;
       }
   }
@@ -29,7 +29,7 @@ if ($result) {
   mysqli_free_result($result);
 }
 else {
-  echo "{$sql} 語法執行失敗，錯誤訊息: " . mysqli_error($link);
+  echo "{$sql} 語法執行失敗，錯誤訊息: " . mysqli_error($conn);
 }
 
 header('Context-type: application/json');
